@@ -53,6 +53,10 @@
         <!-- ===== Version properties ===== -->
         <log4j.version>2.8.1</log4j.version>
         <spring.version>4.3.7.RELEASE</spring.version>
+        <dep.junit.version>5.7.0-M1</dep.junit.version>
+        <dep.assertj.version>3.16.1</dep.assertj.version>
+        <dep.mockito-junit-jupiter.version>3.3.3</dep.mockito-junit-jupiter.version>
+        <dep.cucumber.version>6.0.0-RC2</dep.cucumber.version>
     </properties>
 
 
@@ -244,9 +248,52 @@
 
             <!-- ===== Test unitaires ===== -->
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${dep.junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${dep.junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <version>${dep.junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${dep.assertj.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${dep.mockito-junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-jvm</artifactId>
+                <version>${dep.cucumber.version}</version>
+                <scope>test</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-spring</artifactId>
+                <version>${dep.cucumber.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>${dep.cucumber.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -329,7 +376,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.20</version>
+                    <version>3.0.0-M4</version>
                 </plugin>
 
                 <!-- ===== Plugin d'analyse de code Checkstyle ===== -->
@@ -375,6 +422,13 @@
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>1.10</version>
                 </plugin>
+
+                <!-- ===== Jacoco ===== -->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.5</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -391,7 +445,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.9</version>
+                <version>3.0.0</version>
                 <configuration>
                     <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                 </configuration>
@@ -452,7 +506,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
+                <version>3.2.0</version>
                 <configuration>
                     <!-- Définition de l'exécutable de javadoc à utiliser si on ne prend pas celui par défaut -->
                     <!--javadocExecutable>/opt/java/jdk8/bin/javadoc</javadocExecutable -->
@@ -489,7 +543,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+                <version>3.1.1</version>
                 <configuration>
                     <configLocation>src/build/checkstyle.xml</configLocation>
                     <linkXRef>false</linkXRef>
