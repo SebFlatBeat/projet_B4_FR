@@ -44,6 +44,8 @@ public interface ComptabiliteManager {
      */
     List<SequenceEcritureComptable> getListSequenceEcritureComptable();
 
+    List<SequenceEcritureComptable> getListSequenceEcritureComptable(Integer pAnnee);
+
     /**
      * Ajoute une référence à l'écriture comptable.
      *

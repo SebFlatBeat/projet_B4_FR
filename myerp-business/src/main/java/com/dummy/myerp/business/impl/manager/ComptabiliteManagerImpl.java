@@ -58,8 +58,13 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     }
 
     @Override
-    public List<SequenceEcritureComptable> getListSequenceEcritureComptable(){
+    public List<SequenceEcritureComptable> getListSequenceEcritureComptable() {
         return getDaoProxy().getComptabiliteDao().getListSequenceEcritureComptable();
+    }
+
+    @Override
+    public List<SequenceEcritureComptable> getListSequenceEcritureComptable(Integer pAnnee){
+        return getDaoProxy().getComptabiliteDao().getListSequenceEcritureComptable(pAnnee);
     }
 
     /**
@@ -77,12 +82,15 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
              Calendar calendar = Calendar.getInstance();
              calendar.setTime(ecritureComptableDate);
              int anneeEcritureComptable = calendar.get(YEAR);
-             List<SequenceEcritureComptable> sequenceEcritureComptableList;
+             List<SequenceEcritureComptable> sequenceEcritureComptableList = this.getListSequenceEcritureComptable(anneeEcritureComptable);
                /* 2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
                         1. Utiliser le numéro 1.
                     * Sinon :
-                        1. Utiliser la dernière valeur + 1
-                3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
+                        1. Utiliser la dernière valeur + 1*/
+               if (sequenceEcritureComptableList.size()==0){
+
+               }
+               /* 3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
                 4.  Enregistrer (insert/update) la valeur de la séquence en persitance
                     (table sequence_ecriture_comptable)
          */

@@ -92,6 +92,13 @@ public interface ComptabiliteDao {
     List<SequenceEcritureComptable> getListSequenceEcritureComptable();
 
     /**
+     * Renvoie la liste des Sequences d'Ecritures Comptable avec l'année en argument
+     *
+     * @return {@link List}
+     */
+    List<SequenceEcritureComptable> getListSequenceEcritureComptable(Integer pAnnee);
+
+    /**
      * Insert une nouvelle Sequence d'Ecriture Comptable
      *
      * @param pSequenceEcritureComptable
