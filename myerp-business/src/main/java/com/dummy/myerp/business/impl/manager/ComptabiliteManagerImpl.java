@@ -2,10 +2,7 @@ package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
@@ -73,27 +70,57 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     // TODO à tester
     @Override
     public synchronized void addReference(EcritureComptable pEcritureComptable) {
-        // TODO à implémenter
-        // Bien se réferer à la JavaDoc de cette méthode !
+        // TODO à implémenter!
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
                     (table sequence_ecriture_comptable)*/
-             Date ecritureComptableDate = pEcritureComptable.getDate();
-             Calendar calendar = Calendar.getInstance();
-             calendar.setTime(ecritureComptableDate);
-             int anneeEcritureComptable = calendar.get(YEAR);
-             List<SequenceEcritureComptable> sequenceEcritureComptableList = this.getListSequenceEcritureComptable(anneeEcritureComptable);
+        Date ecritureComptableDate = pEcritureComptable.getDate();
+        Calendar calendar = getInstance();
+        calendar.setTime(ecritureComptableDate);
+        int anneeEcritureComptable = calendar.get(YEAR);
+        List<SequenceEcritureComptable> sequenceEcritureComptableList = this.getListSequenceEcritureComptable(anneeEcritureComptable);
                /* 2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
                         1. Utiliser le numéro 1.
                     * Sinon :
                         1. Utiliser la dernière valeur + 1*/
-               if (sequenceEcritureComptableList.size()==0){
+        Integer valeurSequenceInteger;
+        String valeurSequence = "";
+        List<JournalComptable> journalComptableList = getListJournalComptable();
+        if (sequenceEcritureComptableList.size()==0){
+            valeurSequence = "00001";
+        }else{
+            for (int i = 0; i<journalComptableList.size();i++)
+            {if (pEcritureComptable.getJournal().getCode().equals(sequenceEcritureComptableList.get(i).getReferenceJournalCode())){
+                valeurSequenceInteger = sequenceEcritureComptableList.get(i).getDerniereValeur() + 1;
+                valeurSequence = String.valueOf(valeurSequenceInteger);
+            }
+            }
+        }
+        /* 3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)*/
+        String reference = pEcritureComptable.getJournal().getCode()+"-" +anneeEcritureComptable+"/"+valeurSequence;
+        pEcritureComptable.setReference(reference);
 
-               }
-               /* 3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
+        try {
+            this.updateEcritureComptable(pEcritureComptable);
+        } catch (FunctionalException e) {
+            e.printStackTrace();
+        }
+              /*
                 4.  Enregistrer (insert/update) la valeur de la séquence en persitance
                     (table sequence_ecriture_comptable)
          */
+        SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
+        sequenceEcritureComptable.setAnnee(anneeEcritureComptable);
+        sequenceEcritureComptable.setReferenceJournalCode(pEcritureComptable.getJournal().getCode());
+        if (valeurSequence == "00001") {
+            Integer integerSeq1 = Integer.parseInt(valeurSequence);
+            sequenceEcritureComptable.setDerniereValeur(integerSeq1);
+            insertSequenceEcritureComptable(sequenceEcritureComptable);
+        }else {
+            Integer integerNewSeq = Integer.parseInt(valeurSequence);
+            sequenceEcritureComptable.setDerniereValeur(integerNewSeq);
+           updateSequenceEcritureComptable(sequenceEcritureComptable);
+        }
     }
 
     /**
@@ -120,9 +147,9 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
         if (!vViolations.isEmpty()) {
             throw new FunctionalException("L'écriture comptable ne respecte pas les règles de gestion.",
-                                          new ConstraintViolationException(
-                                              "L'écriture comptable ne respecte pas les contraintes de validation",
-                                              vViolations));
+                    new ConstraintViolationException(
+                            "L'écriture comptable ne respecte pas les contraintes de validation",
+                            vViolations));
         }
 
         // ===== RG_Compta_2 : Pour qu'une écriture comptable soit valide, elle doit être équilibrée
@@ -135,21 +162,21 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         int vNbrDebit = 0;
         for (LigneEcritureComptable vLigneEcritureComptable : pEcritureComptable.getListLigneEcriture()) {
             if (BigDecimal.ZERO.compareTo(ObjectUtils.defaultIfNull(vLigneEcritureComptable.getCredit(),
-                                                                    BigDecimal.ZERO)) != 0) {
+                    BigDecimal.ZERO)) != 0) {
                 vNbrCredit++;
             }
             if (BigDecimal.ZERO.compareTo(ObjectUtils.defaultIfNull(vLigneEcritureComptable.getDebit(),
-                                                                    BigDecimal.ZERO)) != 0) {
+                    BigDecimal.ZERO)) != 0) {
                 vNbrDebit++;
             }
         }
         // On test le nombre de lignes car si l'écriture à une seule ligne
         //      avec un montant au débit et un montant au crédit ce n'est pas valable
         if (pEcritureComptable.getListLigneEcriture().size() < 2
-            || vNbrCredit < 1
-            || vNbrDebit < 1) {
+                || vNbrCredit < 1
+                || vNbrDebit < 1) {
             throw new FunctionalException(
-                "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
+                    "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
         }
 
         // TODO ===== RG_Compta_5 : Format et contenu de la référence
@@ -170,13 +197,13 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
             try {
                 // Recherche d'une écriture ayant la même référence
                 EcritureComptable vECRef = getDaoProxy().getComptabiliteDao().getEcritureComptableByRef(
-                    pEcritureComptable.getReference());
+                        pEcritureComptable.getReference());
 
                 // Si l'écriture à vérifier est une nouvelle écriture (id == null),
                 // ou si elle ne correspond pas à l'écriture trouvée (id != idECRef),
                 // c'est qu'il y a déjà une autre écriture avec la même référence
                 if (pEcritureComptable.getId() == null
-                    || !pEcritureComptable.getId().equals(vECRef.getId())) {
+                        || !pEcritureComptable.getId().equals(vECRef.getId())) {
                     throw new FunctionalException("Une autre écriture comptable existe déjà avec la même référence.");
                 }
             } catch (NotFoundException vEx) {
