@@ -3,6 +3,11 @@ package com.dummy.myerp.business.impl.manager;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.dummy.myerp.business.impl.AbstractBusinessManager;
+import com.dummy.myerp.business.impl.TransactionManager;
+import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import org.junit.Before;
 import org.junit.Test;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
@@ -18,21 +23,30 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ComptabiliteManagerImplTest {
 
     @Mock
-    ComptabiliteManagerImpl manager;
+    private ComptabiliteManagerImpl manager;
+    @Mock
+    private EcritureComptable vEcritureComptable;
+    @Mock
+    private TransactionManager transactionManager;
+    @Mock
+    private DaoProxy daoProxy;
+    @Mock
+    private ComptabiliteDao comptabiliteDao;
 
-    @BeforeEach
+    @Before
     public void initComptabiliteManagerImpl(){
         manager = new ComptabiliteManagerImpl();
+        vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setId(1);
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setReference("AC-2020/00001");
+        vEcritureComptable.setLibelle("Libelle");
     }
 
 
     @Test
     public void checkEcritureComptableUnit() throws Exception {
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
                                                                                  null, new BigDecimal(123),
                                                                                  null));

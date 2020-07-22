@@ -70,7 +70,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     // TODO à tester
     @Override
     public synchronized void addReference(EcritureComptable pEcritureComptable) {
-        // TODO à implémenter!
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
                     (table sequence_ecriture_comptable)*/
@@ -260,16 +259,37 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
     @Override
     public void insertSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable) {
-
+        TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
+        try {
+            getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(pSequenceEcritureComptable);
+            getTransactionManager().commitMyERP(vTS);
+            vTS = null;
+        } finally {
+            getTransactionManager().rollbackMyERP(vTS);
+        }
     }
 
     @Override
     public void updateSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable) {
-
+        TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
+        try {
+            getDaoProxy().getComptabiliteDao().updateSequenceEcritureComptable(pSequenceEcritureComptable);
+            getTransactionManager().commitMyERP(vTS);
+            vTS = null;
+        } finally {
+            getTransactionManager().rollbackMyERP(vTS);
+        }
     }
 
     @Override
     public void deleteSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable) {
-
+        TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
+        try {
+            getDaoProxy().getComptabiliteDao().deleteSequenceEcritureComptable(pSequenceEcritureComptable);
+            getTransactionManager().commitMyERP(vTS);
+            vTS = null;
+        } finally {
+            getTransactionManager().rollbackMyERP(vTS);
+        }
     }
 }
