@@ -14,10 +14,12 @@ import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ComptabiliteManagerImplTest {
@@ -33,8 +35,15 @@ public class ComptabiliteManagerImplTest {
     @Mock
     private ComptabiliteDao comptabiliteDao;
 
+    private LigneEcritureComptable ligneEcritureCredit;
+
+    private LigneEcritureComptable ligneEcritureDebit;
+
     @Before
     public void initComptabiliteManagerImpl(){
+        MockitoAnnotations.initMocks(this);
+        when(this.daoProxy.getComptabiliteDao()).thenReturn(this.comptabiliteDao);
+        AbstractBusinessManager.configure(null,this.daoProxy,this.transactionManager);
         manager = new ComptabiliteManagerImpl();
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setId(1);
@@ -42,17 +51,19 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setReference("AC-2020/00001");
         vEcritureComptable.setLibelle("Libelle");
+        ligneEcritureCredit = new LigneEcritureComptable(new CompteComptable(1),
+                null, new BigDecimal(123),
+                null);
+        ligneEcritureDebit = new LigneEcritureComptable(new CompteComptable(2),
+                null, null,
+                new BigDecimal(123));
     }
 
 
     @Test
     public void checkEcritureComptableUnit() throws Exception {
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                                                                                 null, new BigDecimal(123),
-                                                                                 null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                                                                                 null, null,
-                                                                                 new BigDecimal(123)));
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
