@@ -81,9 +81,7 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                                                                                 null, new BigDecimal(123),
-                                                                                 null));
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
                                                                                  null, null,
                                                                                  new BigDecimal(1234)));
@@ -92,18 +90,17 @@ public class ComptabiliteManagerImplTest {
 
     @Test(expected = FunctionalException.class)
     public void checkEcritureComptableUnitRG3() throws Exception {
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                                                                                 null, new BigDecimal(123),
-                                                                                 null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                                                                                 null, new BigDecimal(123),
-                                                                                 null));
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
+
+    @Test(expected = FunctionalException.class)
+    public void checkEcritureComptableUnitRG3DeuxLignesCredit() throws Exception{
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+        manager.checkEcritureComptableUnit(vEcritureComptable);
+    }
+
+
 
 }
