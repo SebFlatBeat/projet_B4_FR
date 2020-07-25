@@ -8,6 +8,7 @@ import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
@@ -15,6 +16,7 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -94,12 +96,14 @@ public class ComptabiliteManagerImplTest {
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
-    @Test(expected = FunctionalException.class)
-    public void checkEcritureComptableUnitRG3DeuxLignesCredit() throws Exception{
-        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+    @Test
+    public void checkEcritureComptableUnitRG3DeuxLignes() throws Exception{
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
         vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
+
+
 
 
 
