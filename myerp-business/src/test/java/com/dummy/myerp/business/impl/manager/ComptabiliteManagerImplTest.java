@@ -61,7 +61,6 @@ public class ComptabiliteManagerImplTest {
                 new BigDecimal(123));
     }
 
-
     @Test
     public void checkEcritureComptableUnit() throws Exception {
         vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
@@ -96,15 +95,35 @@ public class ComptabiliteManagerImplTest {
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
-    @Test
-    public void checkEcritureComptableUnitRG3DeuxLignes() throws Exception{
+    @Test(expected = FunctionalException.class)
+    public void checkEcritureComptableUnitRG3DeuxLignesDebit() throws Exception{
         vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
-        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
+    @Test(expected = FunctionalException.class)
+    public void checkEcritureComptableRG5FormatAnnee() throws Exception{
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                "Achat numéro 1", new BigDecimal(123),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+                "Achat numéro 2", null,
+                new BigDecimal(123)));
+        vEcritureComptable.setReference("AC-2019/00001");
+        manager.checkEcritureComptableUnit(vEcritureComptable);
+    }
 
-
-
+    @Test(expected = FunctionalException.class)
+    public void checkEcritureComptableRG5FormatReference() throws Exception{
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(3),
+                "Achat numéro 3", new BigDecimal(123),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4),
+                "Achat numéro 4", null,
+                new BigDecimal(123)));
+        vEcritureComptable.setReference("BC-2020/00001");
+        manager.checkEcritureComptableUnit(vEcritureComptable);
+    }
 
 }
