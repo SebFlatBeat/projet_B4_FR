@@ -57,6 +57,11 @@
         <dep.assertj.version>3.16.1</dep.assertj.version>
         <dep.mockito-junit-jupiter.version>3.3.3</dep.mockito-junit-jupiter.version>
         <dep.cucumber.version>6.0.0-RC2</dep.cucumber.version>
+        <dep.jacoco.version>0.8.5</dep.jacoco.version>
+        <dep.sonar.version>3.7.0.1746</dep.sonar.version>
+
+        <!-- ===== SonarCloud aggregate report ===== -->
+        <aggregate.report.dir>test/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
     </properties>
 
 
@@ -442,7 +447,14 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.5</version>
+                    <version>${dep.jacoco.version}</version>
+                </plugin>
+
+                <!-- ===== Sonar ===== -->
+                <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>${dep.sonar.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
