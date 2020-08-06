@@ -61,9 +61,6 @@
         <dep.cucumber.version>6.0.0-RC2</dep.cucumber.version>
         <dep.jacoco.version>0.8.5</dep.jacoco.version>
         <dep.sonar.version>3.7.0.1746</dep.sonar.version>
-
-        <!-- ===== SonarCloud aggregate report ===== -->
-        <aggregate.report.dir>test/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
