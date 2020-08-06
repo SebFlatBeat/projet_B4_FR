@@ -46,6 +46,10 @@
         <java.version>1.8</java.version>
         <maven.build.timestamp.format>dd/MM/yyyy</maven.build.timestamp.format>
         <buildTime>${maven.build.timestamp}</buildTime>
+        <sonar.Java.coveragePlugin>jacoco</sonar.Java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.language>Java</sonar.language>
 
         <!-- ===== Application properties ===== -->
         <application.name>MyERP</application.name>
@@ -454,48 +458,16 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${dep.jacoco.version}</version>
+                    <configuration>
+                        <destFile>${sonar.jacoco.reportPath}</destFile>
+                        <append>true</append>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>prepare-agent</id>
                             <goals>
                                 <goal>prepare-agent</goal>
                             </goals>
-                        </execution>
-                        <execution>
-                            <id>default-report</id>
-                            <goals>
-                                <goal>report</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>default-check</id>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                            <configuration>
-                                <rules>
-                                    <!--  implementation is needed only for Maven 2  -->
-                                    <rule implementation="org.jacoco.maven.RuleConfiguration">
-                                        <element>BUNDLE</element>
-                                    </rule>
-                                </rules>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>merge</id>
-                            <goals>
-                                <goal>merge</goal>
-                            </goals>
-                            <configuration>
-                                <fileSets>
-                                    <fileSet implementation="org.apache.maven.shared.model.fileset.FileSet">
-                                        <directory>${project.basedir}</directory>
-                                        <includes>
-                                            <include>**/*.exec</include>
-                                        </includes>
-                                    </fileSet>
-                                </fileSets>
-                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
