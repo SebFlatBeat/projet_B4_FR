@@ -64,6 +64,7 @@
 
         <!-- ===== SonarCloud aggregate report ===== -->
         <aggregate.report.dir>test/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
 
