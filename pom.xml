@@ -47,8 +47,6 @@
         <maven.build.timestamp.format>dd/MM/yyyy</maven.build.timestamp.format>
         <buildTime>${maven.build.timestamp}</buildTime>
         <sonar.Java.coveragePlugin>jacoco</sonar.Java.coveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>Java</sonar.language>
 
         <!-- ===== Application properties ===== -->

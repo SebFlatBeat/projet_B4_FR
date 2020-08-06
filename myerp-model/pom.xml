@@ -11,7 +11,7 @@
         <groupId>com.dummy.myerp</groupId>
         <artifactId>myerp</artifactId>
         <version>1.x.x-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <!-- ===== Maven ===== -->
@@ -127,6 +127,11 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
                 <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>report-aggregate</id>
                         <phase>verify</phase>
