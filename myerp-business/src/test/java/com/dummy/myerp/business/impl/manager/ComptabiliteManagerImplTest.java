@@ -7,8 +7,8 @@ import com.dummy.myerp.business.impl.AbstractBusinessManager;
 import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
@@ -16,12 +16,9 @@ import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -91,7 +88,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test(expected = FunctionalException.class)
-    public void checkEcritureComptableUnitRG3() throws Exception {
+    public void checkEcritureComptableUnitRG3UneLigneEcriture() throws Exception {
         vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
@@ -101,6 +98,30 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
         vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
         manager.checkEcritureComptableUnit(vEcritureComptable);
+    }
+
+    @Test
+    public void checkEcritureComptableRG4UnitDebit() {
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(5),
+                "Facture 6", null,
+                new BigDecimal("123.56")));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4),
+                "Facture 5", new BigDecimal("-123.56").setScale(2, BigDecimal.ROUND_HALF_UP),
+                null));
+        Assert.assertEquals(vEcritureComptable.getTotalDebit(), BigDecimal.valueOf(-123.56));
+        Assert.assertNotEquals(vEcritureComptable.getTotalDebit(), BigDecimal.valueOf(123.56));
+    }
+
+    @Test
+    public void checkEcritureComptableRG4UnitCredit() {
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(5),
+                "Facture 6", null,
+                new BigDecimal("-123.56")));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4),
+                "Facture 5", new BigDecimal("123.56").setScale(2, BigDecimal.ROUND_HALF_UP),
+                null));
+        Assert.assertEquals(vEcritureComptable.getTotalCredit(), BigDecimal.valueOf(-123.56));
+        Assert.assertNotEquals(vEcritureComptable.getTotalCredit(), BigDecimal.valueOf(123.56));
     }
 
     @Test(expected = FunctionalException.class)
@@ -124,6 +145,17 @@ public class ComptabiliteManagerImplTest {
                 "Achat numéro 4", null,
                 new BigDecimal(123)));
         vEcritureComptable.setReference("BC-2020/00001");
+        manager.checkEcritureComptableUnit(vEcritureComptable);
+    }
+
+    @Test(expected = FunctionalException.class)
+    public void checkEcritureComptableUnitRG7() throws Exception {
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(5),
+                "Facture 6", null,
+                new BigDecimal("123.564")));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4),
+                "Facture 5", new BigDecimal("123.564"),
+                null));
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
