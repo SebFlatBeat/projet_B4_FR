@@ -13,7 +13,8 @@ public abstract class BusinessTestCase {
     static {
         SpringRegistry.init();
     }
-
+    /** {@link DaoProxy} */
+    private static final DaoProxy DAO_PROXY = SpringRegistry.getDaoProxy();
     /** {@link BusinessProxy} */
     private static final BusinessProxy BUSINESS_PROXY = SpringRegistry.getBusinessProxy();
     /** {@link TransactionManager} */
@@ -35,5 +36,9 @@ public abstract class BusinessTestCase {
 
     public static TransactionManager getTransactionManager() {
         return TRANSACTION_MANAGER;
+    }
+
+    public static DaoProxy getDaoProxy(){
+        return DAO_PROXY;
     }
 }

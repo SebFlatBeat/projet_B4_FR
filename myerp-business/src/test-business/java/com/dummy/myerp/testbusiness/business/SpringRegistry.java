@@ -23,7 +23,7 @@ public final class SpringRegistry {
 
     /** Nom des fichiers de contexte de l'application */
     private static final String CONTEXT_APPLI_LOCATION
-        = "classpath:bootstrapContext.xml";
+        = "classpath:/bootstrapContext.xml";
 
     /** Le context spring de l'application */
     private ApplicationContext contextAppli;
@@ -72,6 +72,15 @@ public final class SpringRegistry {
         Object vBean = SpringRegistry.getInstance().contextAppli.getBean(pBeanId);
         SpringRegistry.LOGGER.debug("[FIN] SpringRegistry.getBean() - Bean ID : " + pBeanId);
         return vBean;
+    }
+
+    /**
+     * Renvoie l'instance de {@link DaoProxy} de l'application
+     *
+     * @return {@link DaoProxy}
+     */
+    public static DaoProxy getDaoProxy(){
+        return (DaoProxy) SpringRegistry.getBean("DaoProxy")
     }
 
 

@@ -24,6 +24,7 @@ public class TestInitSpring extends BusinessTestCase {
     @Test
     public void testInit() {
         SpringRegistry.init();
+        Assert.assertNotNull(SpringRegistry.getDaoProxy())
         Assert.assertNotNull(SpringRegistry.getBusinessProxy());
         Assert.assertNotNull(SpringRegistry.getTransactionManager());
     }
