@@ -91,7 +91,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         SQLgetEcritureComptable = pSQLgetEcritureComptable;
     }
     @Override
-    public EcritureComptable getEcritureComptable(Integer pId) throws NotFoundException {
+    public EcritureComptable getEcritureComptable(Integer pId) {
         NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("id", pId);
@@ -100,7 +100,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         try {
             vBean = vJdbcTemplate.queryForObject(SQLgetEcritureComptable, vSqlParams, vRM);
         } catch (EmptyResultDataAccessException vEx) {
-            throw new NotFoundException("EcritureComptable non trouvée : id=" + pId);
+            return null;
         }
         return vBean;
     }

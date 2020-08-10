@@ -43,7 +43,7 @@ public interface ComptabiliteDao {
      * @return {@link EcritureComptable}
      * @throws NotFoundException : Si l'écriture comptable n'est pas trouvée
      */
-    EcritureComptable getEcritureComptable(Integer pId) throws NotFoundException;
+    EcritureComptable getEcritureComptable(Integer pId);
 
     /**
      * Renvoie l'Écriture Comptable de référence {@code pRef}.
@@ -101,21 +101,21 @@ public interface ComptabiliteDao {
     /**
      * Insert une nouvelle Sequence d'Ecriture Comptable
      *
-     * @param pSequenceEcritureComptable
+     * @param pSequenceEcritureComptable sequence de l'ecriture comptable
      */
     void insertSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable);
 
     /**
      * Met à jour la Sequence d'Ecriture Comptable
      *
-     * @param pSequenceEcritureComptable
+     * @param pSequenceEcritureComptable sequence de l'ecriture comptable
      */
     void updateSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable);
 
     /**
      * Supprime une Sequence d'Ecriture Comptable
      *
-     * @param pSequenceEcritureComptable
+     * @param pSequenceEcritureComptable sequence de l'ecriture comptable
      */
     void deleteSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable);
 
