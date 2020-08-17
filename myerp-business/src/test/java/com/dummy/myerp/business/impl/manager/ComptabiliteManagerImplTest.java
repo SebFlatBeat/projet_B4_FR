@@ -3,11 +3,6 @@ package com.dummy.myerp.business.impl.manager;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
-
-import com.dummy.myerp.business.impl.AbstractBusinessManager;
-import com.dummy.myerp.business.impl.TransactionManager;
-import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
-import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,25 +11,13 @@ import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class ComptabiliteManagerImplTest {
+//enlever les mocks, apparement ils posent problemes regarde Vincent et Paul
 
-    @Mock
     private ComptabiliteManagerImpl manager;
-    @Mock
+
     private EcritureComptable vEcritureComptable;
-    @Mock
-    private TransactionManager transactionManager;
-    @Mock
-    private DaoProxy daoProxy;
-    @Mock
-    private ComptabiliteDao comptabiliteDao;
 
     private LigneEcritureComptable ligneEcritureCredit;
 
@@ -42,9 +25,6 @@ public class ComptabiliteManagerImplTest {
 
     @Before
     public void initComptabiliteManagerImpl(){
-        MockitoAnnotations.initMocks(this);
-        when(this.daoProxy.getComptabiliteDao()).thenReturn(this.comptabiliteDao);
-        AbstractBusinessManager.configure(null,this.daoProxy,this.transactionManager);
         manager = new ComptabiliteManagerImpl();
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setId(1);
