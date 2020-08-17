@@ -1,13 +1,13 @@
 package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
 import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
-import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -107,7 +107,7 @@ public class ComptabiliteManagerImplTest {
                 "Facture 6", null,
                 new BigDecimal("123.56")));
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4),
-                "Facture 5", new BigDecimal("-123.56").setScale(2, BigDecimal.ROUND_HALF_UP),
+                "Facture 5", new BigDecimal("-123.56").setScale(2, RoundingMode.HALF_EVEN),
                 null));
         Assert.assertEquals(vEcritureComptable.getTotalDebit(), BigDecimal.valueOf(-123.56));
         Assert.assertNotEquals(vEcritureComptable.getTotalDebit(), BigDecimal.valueOf(123.56));
@@ -119,7 +119,7 @@ public class ComptabiliteManagerImplTest {
                 "Facture 6", null,
                 new BigDecimal("-123.56")));
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4),
-                "Facture 5", new BigDecimal("123.56").setScale(2, BigDecimal.ROUND_HALF_UP),
+                "Facture 5", new BigDecimal("123.56").setScale(2, RoundingMode.HALF_EVEN),
                 null));
         Assert.assertEquals(vEcritureComptable.getTotalCredit(), BigDecimal.valueOf(-123.56));
         Assert.assertNotEquals(vEcritureComptable.getTotalCredit(), BigDecimal.valueOf(123.56));
@@ -221,8 +221,4 @@ public class ComptabiliteManagerImplTest {
         manager.deleteEcritureComptable(vEcritureComptable.getId());
     }
 
-    @Test
-    public void addReference (){
-
-    }
 }
