@@ -93,10 +93,6 @@
                                 <goals>
                                     <goal>prepare-agent</goal>
                                 </goals>
-                                <configuration>
-                                    <propertyName>jacocoArgLine</propertyName>
-                                    <!-- Sets the path to the file which contains the execution data. -->
-                                </configuration>
                             </execution>
                             <execution>
                                 <id>coverage-check</id>
@@ -145,10 +141,9 @@
                         <executions>
                             <execution>
                                 <id>jacoco-initialize</id>
-                                <goals><goal>prepare-agent</goal></goals>
-                                <configuration>
-                                    <propertyName>jacocoArgLine</propertyName>
-                                </configuration>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
