@@ -524,6 +524,11 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${dep.jacoco.version}</version>
+                    <configuration>
+                        <includes>
+                            <include>com/myerp/myerp-business/**/*.class</include>
+                        </includes>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
