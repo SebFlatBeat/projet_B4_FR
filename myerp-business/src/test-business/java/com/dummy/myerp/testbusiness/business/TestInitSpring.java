@@ -1,5 +1,6 @@
 package com.dummy.myerp.testbusiness.business;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -24,7 +25,7 @@ public class TestInitSpring extends BusinessTestCase {
     @Test
     public void testInit() {
         SpringRegistry.init();
-        Assert.assertNotNull(SpringRegistry.getDaoProxy())
+        Assert.assertNotNull(SpringRegistry.getDaoProxy());
         Assert.assertNotNull(SpringRegistry.getBusinessProxy());
         Assert.assertNotNull(SpringRegistry.getTransactionManager());
     }
