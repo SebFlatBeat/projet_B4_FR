@@ -24,10 +24,10 @@ public final class SpringRegistry {
 
     /** Nom des fichiers de contexte de l'application */
     private static final String CONTEXT_APPLI_LOCATION
-        = "classpath:/bootstrapContext.xml";
+            = "classpath:com/dummy/myerp/business/bootstrapContext.xml";
 
     /** Le context spring de l'application */
-    private ApplicationContext contextAppli;
+    private final ApplicationContext contextAppli;
 
 
     // ==================== ID des Beans Spring ====================
@@ -48,7 +48,7 @@ public final class SpringRegistry {
      *
      * @return SpringRegistry
      */
-    protected static final SpringRegistry getInstance() {
+    protected static SpringRegistry getInstance() {
         return SpringRegistry.INSTANCE;
     }
 
@@ -57,8 +57,9 @@ public final class SpringRegistry {
      *
      * @return ApplicationContext
      */
-    public static final ApplicationContext init() {
-        // le fait d'appeler cette méthode, déclanche l'appel des initialisation static et donc le chargement du context
+
+    public static ApplicationContext init() {
+        // le fait d'appeler cette méthode, déclenche l'appel des initialisation static et donc le chargement du context
         return getInstance().contextAppli;
     }
 

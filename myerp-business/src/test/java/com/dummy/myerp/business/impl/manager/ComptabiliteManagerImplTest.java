@@ -13,7 +13,7 @@ import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 
 public class ComptabiliteManagerImplTest {
-//enlever les mocks, apparement ils posent problemes regarde Vincent et Paul
+
 
     private ComptabiliteManagerImpl manager;
 
