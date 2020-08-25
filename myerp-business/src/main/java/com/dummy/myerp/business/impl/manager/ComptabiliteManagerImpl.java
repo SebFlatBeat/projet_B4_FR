@@ -1,7 +1,6 @@
 package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -64,6 +63,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         return getDaoProxy().getComptabiliteDao().getListSequenceEcritureComptable(pAnnee);
     }
 
+
     /**
      * {@inheritDoc}
      */
@@ -85,7 +85,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         Integer valeurSequenceInteger;
         String valeurSequence = "";
         List<JournalComptable> journalComptableList = getListJournalComptable();
-        if (sequenceEcritureComptableList.size()==0){
+        if (sequenceEcritureComptableList.isEmpty()){
             valeurSequence = "00001";
         }else{
             for (int i = 0; i<journalComptableList.size();i++)
@@ -111,7 +111,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable();
         sequenceEcritureComptable.setAnnee(anneeEcritureComptable);
         sequenceEcritureComptable.setReferenceJournalCode(pEcritureComptable.getJournal().getCode());
-        if (valeurSequence == "00001") {
+        if (valeurSequence.equals("00001")) {
             Integer integerSeq1 = Integer.parseInt(valeurSequence);
             sequenceEcritureComptable.setDerniereValeur(integerSeq1);
             insertSequenceEcritureComptable(sequenceEcritureComptable);

@@ -2,22 +2,33 @@ package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.dummy.myerp.model.bean.comptabilite.*;
+import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
-import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
-import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
-import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
+import org.junit.rules.ExpectedException;
 
 public class ComptabiliteManagerImplTest {
 
+    @Rule
+    public ExpectedException thrown= ExpectedException.none();
 
     private ComptabiliteManagerImpl manager;
 
     private EcritureComptable vEcritureComptable;
+
+    private JournalComptable journalComptable;
+
+    private SequenceEcritureComptable sequenceEcritureComptable;
+
+    private List<SequenceEcritureComptable> listSequenceEcritureComptable;
 
     private LigneEcritureComptable ligneEcritureCredit;
 
@@ -26,18 +37,18 @@ public class ComptabiliteManagerImplTest {
     @Before
     public void initComptabiliteManagerImpl(){
         manager = new ComptabiliteManagerImpl();
+        listSequenceEcritureComptable = new ArrayList<>();
         vEcritureComptable = new EcritureComptable();
+        sequenceEcritureComptable = new SequenceEcritureComptable("AC", 2018, 32);
         vEcritureComptable.setId(1);
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        journalComptable = new JournalComptable("AC", "Achat");
+        vEcritureComptable.setJournal(journalComptable);
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setReference("AC-2020/00001");
         vEcritureComptable.setLibelle("Libelle");
-        ligneEcritureCredit = new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null);
-        ligneEcritureDebit = new LigneEcritureComptable(new CompteComptable(2),
-                null, null,
-                new BigDecimal(123));
+
+        ligneEcritureCredit = new LigneEcritureComptable(new CompteComptable(1),null, new BigDecimal(123),null);
+        ligneEcritureDebit = new LigneEcritureComptable(new CompteComptable(2), null, null, new BigDecimal(123));
     }
 
     @Test
@@ -49,15 +60,11 @@ public class ComptabiliteManagerImplTest {
 
     @Test(expected = FunctionalException.class)
     public void checkEcritureComptableUnitViolation() throws Exception {
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
     @Test(expected = FunctionalException.class)
     public void checkEcritureComptableUnitRG2() throws Exception {
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
@@ -201,4 +208,10 @@ public class ComptabiliteManagerImplTest {
         manager.deleteEcritureComptable(vEcritureComptable.getId());
     }
 
+    @Test(expected = Test.None.class)
+    public void checkEcritureComptableRG5AvecSequenceExistante() throws NotFoundException {
+        listSequenceEcritureComptable.add(sequenceEcritureComptable);
+        manager.addReference(vEcritureComptable);
+        Assert.assertEquals("AC-2018/00033",vEcritureComptable.getReference());
+    }
 }
