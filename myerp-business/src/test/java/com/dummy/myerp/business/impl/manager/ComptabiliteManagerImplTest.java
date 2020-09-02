@@ -180,8 +180,8 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable.setJournal(new JournalComptable("AC","Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Insertion écriture");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture C1",new BigDecimal(411),null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), "Facture c2",new BigDecimal(401),null));
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
         manager.insertEcritureComptable(vEcritureComptable);
     }
 
@@ -197,21 +197,4 @@ public class ComptabiliteManagerImplTest {
         manager.updateEcritureComptable(vEcritureComptable);
     }
 
-    @Test(expected = FunctionalException.class)
-    public void deleteEcritureComptable() throws FunctionalException {
-        vEcritureComptable.setJournal(new JournalComptable("AC","Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Insertion écriture");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture C1",new BigDecimal(411),null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), "Facture c2",new BigDecimal(401),null));
-        manager.insertEcritureComptable(vEcritureComptable);
-        manager.deleteEcritureComptable(vEcritureComptable.getId());
-    }
-
-    @Test(expected = Test.None.class)
-    public void checkEcritureComptableRG5AvecSequenceExistante() throws NotFoundException {
-        listSequenceEcritureComptable.add(sequenceEcritureComptable);
-        manager.addReference(vEcritureComptable);
-        Assert.assertEquals("AC-2018/00033",vEcritureComptable.getReference());
-    }
 }
