@@ -65,4 +65,5 @@ public class SequenceEcritureComptable {
                 .append("}");
         return vStB.toString();
     }
+
 }
