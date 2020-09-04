@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ComptabiliteManagerImplTest {
 
     @Rule
-    public ExpectedException thrown= ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none();
 
     private ComptabiliteManagerImpl manager;
 

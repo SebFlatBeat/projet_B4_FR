@@ -115,17 +115,18 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         }else {
             Integer integerNewSeq = Integer.parseInt(valeurSequence);
             sequenceEcritureComptable.setDerniereValeur(integerNewSeq);
-           updateSequenceEcritureComptable(sequenceEcritureComptable);
+            updateSequenceEcritureComptable(sequenceEcritureComptable);
         }
     }
 
     /**
      *
      * @param sequenceEcritureComptable
-     * @return
+     * @return reference
      */
     public String reference(SequenceEcritureComptable sequenceEcritureComptable){
-        String reference = sequenceEcritureComptable.getReferenceJournalCode()+ "-"
+        String reference;
+        reference = sequenceEcritureComptable.getReferenceJournalCode()+ "-"
                 + sequenceEcritureComptable.getAnnee() + "/"
                 + String.format("%05d", sequenceEcritureComptable.getDerniereValeur() );
         return  reference;
