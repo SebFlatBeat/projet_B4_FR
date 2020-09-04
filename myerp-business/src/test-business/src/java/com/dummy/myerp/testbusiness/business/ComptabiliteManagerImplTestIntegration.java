@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
+
     private ComptabiliteManagerImpl manager;
 
     private EcritureComptable vEcritureComptable;
