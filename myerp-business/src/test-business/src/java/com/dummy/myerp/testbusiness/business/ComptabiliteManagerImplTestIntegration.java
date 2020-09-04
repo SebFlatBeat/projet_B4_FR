@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
-    private ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
+    private ComptabiliteManagerImpl manager;
 
     private EcritureComptable vEcritureComptable;
     private ComptabiliteDaoImpl comptabiliteDao = ComptabiliteDaoImpl.getInstance();
@@ -68,6 +68,7 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
     @Test
     public void insertEcritureComptable() throws FunctionalException{
+        manager = new ComptabiliteManagerImpl();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setReference("AC-2020/00005");
         vEcritureComptable.setLibelle("Insertion nouvelle écriture");
@@ -83,6 +84,7 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
     @Test
     public void updateEcritureComptable() throws FunctionalException{
+        manager = new ComptabiliteManagerImpl();
         EcritureComptable ecritureComptable = manager.getListEcritureComptable().get(0);
         assertThat(ecritureComptable.getId()).isEqualTo(-1);
         ecritureComptable.setLibelle("Update_Test");
@@ -92,6 +94,7 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
     @Test
     public void deleteEcritureComptable() throws FunctionalException {
+        manager = new ComptabiliteManagerImpl();
         vEcritureComptable.setJournal(new JournalComptable("AC","Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Insertion écriture");
@@ -106,6 +109,7 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
     @Test
     public void addReferenceTest() throws FunctionalException{
+        manager = new ComptabiliteManagerImpl();
         EcritureComptable vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setId(3);
         vEcritureComptable.setLibelle("libelle addReference");
@@ -122,6 +126,7 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
     @Test(expected = FunctionalException.class )
     public void checkEcritureComptableContextRG6_New() throws FunctionalException {
+        manager = new ComptabiliteManagerImpl();
         EcritureComptable vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setLibelle("Nombre écriture valide : au moins 1  ligne de débit et 1 ligne de crédit");
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture C1",new BigDecimal(411),null));
@@ -133,6 +138,7 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
     @Test(expected = FunctionalException.class )
     public void checkEcritureComptableContextRG6_Exist() throws FunctionalException {
+        manager = new ComptabiliteManagerImpl();
         vEcritureComptable.setId(-2);
         manager.checkEcritureComptable( vEcritureComptable);
         vEcritureComptable.setReference("VE-2016/00004");
@@ -141,6 +147,7 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
     @Test(expected = FunctionalException.class )
     public void checkEcritureComptableContextRG6_isEmpty() throws FunctionalException {
+        manager = new ComptabiliteManagerImpl();
         vEcritureComptable.setId(-2);
         vEcritureComptable.setReference(null);
         manager.checkEcritureComptable( vEcritureComptable);
