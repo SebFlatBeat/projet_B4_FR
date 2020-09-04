@@ -72,7 +72,7 @@ public class CompteComptable {
         final String vSEP = ", ";
         vStB.append("{")
             .append("numero=").append(numero)
-            .append(vSEP).append("libelle='").append(libelle).append('\'')
+            .append(vSEP).append("libelle=").append(libelle).append('\'')
             .append("}");
         return vStB.toString();
     }

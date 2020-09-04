@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:bootstrapContext.xml"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
 
     private ComptabiliteManagerImpl manager;
