@@ -100,11 +100,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         String reference = pEcritureComptable.getJournal().getCode()+"-" +anneeEcritureComptable+"/"+valeurSequence;
         pEcritureComptable.setReference(reference);
 
-        try {
-            this.updateEcritureComptable(pEcritureComptable);
-        } catch (FunctionalException e) {
-            e.printStackTrace();
-        }
               /*
                 4.  Enregistrer (insert/update) la valeur de la séquence en persitance
                     (table sequence_ecriture_comptable)

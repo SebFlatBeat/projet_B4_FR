@@ -6,10 +6,7 @@ import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.test.context.ContextConfiguration;
@@ -42,6 +39,8 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
     private List<SequenceEcritureComptable> listSequenceEcritureComptable;
     private LigneEcritureComptable ligneEcritureCredit;
     private LigneEcritureComptable ligneEcritureDebit;
+    private LigneEcritureComptable ligneEcritureComptableCreditReference;
+    private LigneEcritureComptable ligneEcritureComptableDebitReference;
 
     @Before
     public void initAll()  {
@@ -58,17 +57,27 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
         vEcritureComptable.setLibelle("Libelle");
         ligneEcritureCredit = new LigneEcritureComptable(new CompteComptable(401),null, new BigDecimal(123),null);
         ligneEcritureDebit = new LigneEcritureComptable(new CompteComptable(411), null, null, new BigDecimal(123));
+        ligneEcritureComptableCreditReference = new LigneEcritureComptable(new CompteComptable(606),null, new BigDecimal(123),null);
+        ligneEcritureComptableDebitReference = new LigneEcritureComptable(new CompteComptable(706),null, null,new BigDecimal(123));
+    }
+
+    @After
+    public void clearInit(){
+        comptabiliteDao.clearInit();
     }
 
     @Test
     public void insertEcritureComptable() throws FunctionalException{
-       vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-       vEcritureComptable.setReference("AC-2020/00005");
-       vEcritureComptable.setLibelle("Insertion nouvelle écriture");
-       vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
-       vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setReference("AC-2020/00005");
+        vEcritureComptable.setLibelle("Insertion nouvelle écriture");
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
 
-       manager.insertEcritureComptable(vEcritureComptable);
+        int listCompare = manager.getListEcritureComptable().size();
+        manager.insertEcritureComptable(vEcritureComptable);
+        assertThat(manager.getListEcritureComptable().size()).isEqualTo(listCompare+1);
+        assertThat(vEcritureComptable.getReference()).isEqualTo("AC-2020/00005");
 
     }
 
@@ -81,15 +90,62 @@ public class ComptabiliteManagerImplTestIntegration extends BusinessTestCase{
         assertThat(ecritureComptable.getLibelle()).isEqualTo("Update_Test");
     }
 
-    @Test(expected = FunctionalException.class)
+    @Test
     public void deleteEcritureComptable() throws FunctionalException {
         vEcritureComptable.setJournal(new JournalComptable("AC","Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Insertion écriture");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture C1",new BigDecimal(411),null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), "Facture c2",null,new BigDecimal(411)));
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
+
         manager.insertEcritureComptable(vEcritureComptable);
+        int listCompare = manager.getListEcritureComptable().size();
         manager.deleteEcritureComptable(vEcritureComptable.getId());
+        assertThat(manager.getListEcritureComptable().size());
+    }
+
+    @Test
+    public void addReferenceTest() throws FunctionalException{
+        EcritureComptable vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setId(3);
+        vEcritureComptable.setLibelle("libelle addReference");
+        vEcritureComptable.setDate(new Date());
+        journalComptable = (new JournalComptable("BQ","Banque"));
+        vEcritureComptable.setJournal(journalComptable);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureComptableCreditReference);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureComptableDebitReference);
+
+        manager.addReference(vEcritureComptable);
+        manager.insertEcritureComptable(vEcritureComptable);
+        assertThat(vEcritureComptable.getReference()).isEqualTo("BQ-2020/00001");
+    }
+
+    @Test(expected = FunctionalException.class )
+    public void checkEcritureComptableContextRG6_New() throws FunctionalException {
+        EcritureComptable vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setLibelle("Nombre écriture valide : au moins 1  ligne de débit et 1 ligne de crédit");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture C1",new BigDecimal(411),null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), "Facture c2",new BigDecimal(401),null));
+        manager.checkEcritureComptable(vEcritureComptable);
+        vEcritureComptable.setReference("AC-2016/00001");
+        manager.checkEcritureComptable(vEcritureComptable);
+    }
+
+    @Test(expected = FunctionalException.class )
+    public void checkEcritureComptableContextRG6_Exist() throws FunctionalException {
+        vEcritureComptable.setId(-2);
+        manager.checkEcritureComptable( vEcritureComptable);
+        vEcritureComptable.setReference("VE-2016/00004");
+        manager.checkEcritureComptable( vEcritureComptable );
+    }
+
+    @Test(expected = FunctionalException.class )
+    public void checkEcritureComptableContextRG6_isEmpty() throws FunctionalException {
+        vEcritureComptable.setId(-2);
+        vEcritureComptable.setReference(null);
+        manager.checkEcritureComptable( vEcritureComptable);
+        vEcritureComptable.setReference("VE-2016/00004");
+        manager.checkEcritureComptable( vEcritureComptable );
     }
 
 }

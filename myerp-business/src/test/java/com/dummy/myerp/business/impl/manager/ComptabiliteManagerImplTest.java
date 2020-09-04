@@ -7,13 +7,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.dummy.myerp.model.bean.comptabilite.*;
-import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import org.junit.rules.ExpectedException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ComptabiliteManagerImplTest {
 
@@ -61,6 +62,12 @@ public class ComptabiliteManagerImplTest {
     @Test(expected = FunctionalException.class)
     public void checkEcritureComptableUnitViolation() throws Exception {
         manager.checkEcritureComptableUnit(vEcritureComptable);
+    }
+
+    @Test
+    public void referenceTest(){
+    assertThat(vEcritureComptable.getReference()).isNotEqualTo("AC-2018/00032");
+    assertThat(vEcritureComptable.getReference()).isEqualTo("AC-2020/00001");
     }
 
     @Test(expected = FunctionalException.class)
@@ -136,34 +143,6 @@ public class ComptabiliteManagerImplTest {
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
-    @Test(expected = FunctionalException.class )
-    public void checkEcritureComptableContextRG6_New() throws FunctionalException {
-        EcritureComptable vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setLibelle("Nombre écriture valide : au moins 1  ligne de débit et 1 ligne de crédit");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture C1",new BigDecimal(411),null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), "Facture c2",new BigDecimal(401),null));
-        manager.checkEcritureComptable(vEcritureComptable);
-        vEcritureComptable.setReference("AC-2016/00001");
-        manager.checkEcritureComptable(vEcritureComptable);
-    }
-
-    @Test(expected = FunctionalException.class )
-    public void checkEcritureComptableContextRG6_Exist() throws FunctionalException {
-        vEcritureComptable.setId(-2);
-        manager.checkEcritureComptable( vEcritureComptable);
-        vEcritureComptable.setReference("VE-2016/00004");
-        manager.checkEcritureComptable( vEcritureComptable );
-    }
-
-    @Test(expected = FunctionalException.class )
-    public void checkEcritureComptableContextRG6_isEmpty() throws FunctionalException {
-        vEcritureComptable.setId(-2);
-        vEcritureComptable.setReference(null);
-        manager.checkEcritureComptable( vEcritureComptable);
-        vEcritureComptable.setReference("VE-2016/00004");
-        manager.checkEcritureComptable( vEcritureComptable );
-    }
-
     @Test(expected = FunctionalException.class)
     public void checkEcritureComptableUnitRG7() throws Exception {
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(5),
@@ -173,28 +152,6 @@ public class ComptabiliteManagerImplTest {
                 "Facture 5", new BigDecimal("123.564"),
                 null));
         manager.checkEcritureComptableUnit(vEcritureComptable);
-    }
-
-    @Test(expected = FunctionalException.class)
-    public void insertEcritureComptable() throws FunctionalException {
-        vEcritureComptable.setJournal(new JournalComptable("AC","Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Insertion écriture");
-        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
-        vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
-        manager.insertEcritureComptable(vEcritureComptable);
-    }
-
-    @Test(expected = FunctionalException.class)
-    public void updateEcritureComptable() throws FunctionalException {
-        vEcritureComptable.setJournal(new JournalComptable("AC","Achat"));
-        vEcritureComptable.setDate(new Date());
-        vEcritureComptable.setLibelle("Insertion écriture");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture C1",new BigDecimal(411),null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), "Facture c2",new BigDecimal(401),null));
-        manager.insertEcritureComptable(vEcritureComptable);
-        vEcritureComptable.setLibelle("Insertion nouvelle écriture");
-        manager.updateEcritureComptable(vEcritureComptable);
     }
 
 }
