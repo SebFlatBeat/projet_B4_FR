@@ -1,5 +1,7 @@
 import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
+import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,5 +34,17 @@ public class ComptabiliteDaoImplTest {
     public void getListCompteComptable(){
         List<CompteComptable> compteComptableList = comptabiliteDao.getListCompteComptable();
         assertNotNull(compteComptableList);
+    }
+
+    @Test
+    public void getListJournalComptable(){
+        List<JournalComptable> journalComptableList = comptabiliteDao.getListJournalComptable();
+        assertNotNull(journalComptableList);
+    }
+
+    @Test
+    public void getListEcritureComptable(){
+        List<EcritureComptable> ecritureComptableList = comptabiliteDao.getListEcritureComptable();
+        assertNotNull(ecritureComptableList);
     }
 }
