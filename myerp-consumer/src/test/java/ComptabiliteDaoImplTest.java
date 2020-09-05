@@ -1,7 +1,9 @@
 import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
+import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.EcritureComptableRM;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,5 +48,18 @@ public class ComptabiliteDaoImplTest {
     public void getListEcritureComptable(){
         List<EcritureComptable> ecritureComptableList = comptabiliteDao.getListEcritureComptable();
         assertNotNull(ecritureComptableList);
+    }
+
+    @Test
+    public void getEcritureComptable(){
+        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptable(-1);
+        assertNotNull(ecritureComptable);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getEcritureComptableByRef() throws NotFoundException {
+        EcritureComptable ecritureComptable = comptabiliteDao.getEcritureComptableByRef("AC-2000/00001");
+        assertNotNull(ecritureComptable);
+        comptabiliteDao.getEcritureComptableByRef("AC-2000/00002");
     }
 }
