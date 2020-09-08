@@ -1,4 +1,4 @@
-package com.dummy.myerp.testbusiness.business;
+package com.dummy.myerp.business;
 
 import org.junit.Assert;
 import org.junit.Test;

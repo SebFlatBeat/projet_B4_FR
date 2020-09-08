@@ -189,7 +189,7 @@
                                 </goals>
                                 <configuration>
                                     <sources>
-                                        <source>src/test-business/java</source>
+                                        <source>src/test-business/src/java</source>
                                     </sources>
                                 </configuration>
                             </execution>
