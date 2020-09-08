@@ -98,6 +98,9 @@ public interface ComptabiliteDao {
      */
     List<SequenceEcritureComptable> getListSequenceEcritureComptable(Integer pAnnee);
 
+    SequenceEcritureComptable getSequenceEcritureComptable(String journalCode, Integer annee, Integer derniereValeur);
+
+
     /**
      * Insert une nouvelle Sequence d'Ecriture Comptable
      *

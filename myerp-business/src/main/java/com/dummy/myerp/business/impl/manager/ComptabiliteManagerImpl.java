@@ -68,7 +68,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     /**
      * {@inheritDoc}
      */
-    // TODO à tester
     @Override
     public synchronized void addReference(EcritureComptable pEcritureComptable) {
         /* Le principe :
@@ -90,10 +89,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         if (sequenceEcritureComptableList.isEmpty()){
             valeurSequence = "00001";
         }else{
-            for (int i = 0; i<journalComptableList.size();i++)
+            for (int i = 0; i<sequenceEcritureComptableList.size();i++)
             {if (pEcritureComptable.getJournal().getCode().equals(sequenceEcritureComptableList.get(i).getReferenceJournalCode())){
                 valeurSequenceInteger = sequenceEcritureComptableList.get(i).getDerniereValeur() + 1;
-                valeurSequence = String.valueOf(valeurSequenceInteger);
+                valeurSequence = "0000"+valeurSequenceInteger;
             }
             }
         }
@@ -135,7 +134,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     /**
      * {@inheritDoc}
      */
-    // TODO à tester
     @Override
     public void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
         this.checkEcritureComptableUnit(pEcritureComptable);
@@ -150,7 +148,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * @param pEcritureComptable -
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
-    // TODO tests à compléter
+
     protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
 
         // ===== RG_Compta_3 : une écriture comptable doit avoir au moins 2 lignes d'écriture (1 au débit, 1 au crédit)

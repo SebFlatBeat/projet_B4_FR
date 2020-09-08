@@ -1,7 +1,9 @@
 package com.dummy.myerp.business;
 
+import com.dummy.myerp.business.impl.BusinessProxyImpl;
 import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.business.impl.manager.ComptabiliteManagerImpl;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
@@ -9,9 +11,12 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.TransactionStatus;
 
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -119,6 +124,19 @@ public class ComptabiliteManagerImplIntegrationTest extends BusinessTestCase{
         manager.addReference(vEcritureComptable);
         manager.insertEcritureComptable(vEcritureComptable);
         assertThat(vEcritureComptable.getReference()).isEqualTo("BQ-2020/00001");
+
+        EcritureComptable pEcritureComptable = new EcritureComptable();
+        pEcritureComptable.setId(4);
+        pEcritureComptable.setLibelle("libelle addReference");
+        pEcritureComptable.setDate(new Date());
+        journalComptable = (new JournalComptable("BQ","Banque"));
+        pEcritureComptable.setJournal(journalComptable);
+        pEcritureComptable.getListLigneEcriture().add(ligneEcritureComptableCreditReference);
+        pEcritureComptable.getListLigneEcriture().add(ligneEcritureComptableDebitReference);
+
+        manager.addReference(pEcritureComptable);
+        manager.insertEcritureComptable(pEcritureComptable);
+        assertThat(pEcritureComptable.getReference()).isEqualTo("BQ-2020/00002");
     }
 
     @Test(expected = FunctionalException.class )
@@ -149,7 +167,46 @@ public class ComptabiliteManagerImplIntegrationTest extends BusinessTestCase{
         vEcritureComptable.setReference(null);
         manager.checkEcritureComptable( vEcritureComptable);
         vEcritureComptable.setReference("VE-2016/00004");
-        manager.checkEcritureComptable( vEcritureComptable );
+        manager.checkEcritureComptable(vEcritureComptable);
     }
 
+    @Test(expected = FunctionalException.class )
+    public void checkEcritureComptableContextRG6_idEmpty() throws FunctionalException, ParseException {
+        manager = new ComptabiliteManagerImpl();
+        EcritureComptable vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setId(null);
+        vEcritureComptable.setReference("VE-2016/00002");
+        Date date = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String oldDate = "22/06/2016";
+        date = simpleDateFormat.parse(oldDate);
+        vEcritureComptable.setDate(date);
+        vEcritureComptable.setLibelle("Null Id");
+        vEcritureComptable.setJournal(new JournalComptable("VE", "Vente"));
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureCredit);
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
+        manager.checkEcritureComptable(vEcritureComptable);
+    }
+
+    @Test
+    public void transactionManagerStatus(){
+        TransactionStatus vTS = null;
+        try{
+            transactionManager.commitMyERP(vTS);
+            Assert.assertNull(vTS);
+        }finally{
+            vTS = transactionManager.beginTransactionMyERP();
+            Assert.assertNotNull(vTS);
+            transactionManager.rollbackMyERP(vTS);
+        }
+        vTS = transactionManager.beginTransactionMyERP();
+        try {
+            transactionManager.commitMyERP(vTS);
+            Assert.assertNotNull( vTS );
+            vTS = null;
+        } finally {
+            Assert.assertNull( vTS );
+            transactionManager.rollbackMyERP(vTS);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.dummy.myerp.consumer.dao.impl.db.dao;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.*;
@@ -282,8 +283,16 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
      * SQLgetSequenceEcritureComptable
      */
     private static String SQLgetSequenceEcritureComptable;
+    public void setSQLgetSequenceEcritureComptable(String pSQLgetSequenceEcritureComptable) {
+        SQLgetSequenceEcritureComptable = pSQLgetSequenceEcritureComptable;
+    }
+
+    /**
+     * SQLgetListSequenceEcritureComptable
+     */
+    private static String SQLgetListSequenceEcritureComptable;
     public void setSQLgetListSequenceEcritureComptable(String pSQLgetListSequenceEcritureComptable) {
-        SQLgetSequenceEcritureComptable = pSQLgetListSequenceEcritureComptable;
+        SQLgetListSequenceEcritureComptable = pSQLgetListSequenceEcritureComptable;
     }
 
     /**
@@ -346,6 +355,24 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         return vList;
     }
 
+    @Override
+    public SequenceEcritureComptable getSequenceEcritureComptable(String pJournalCode, Integer pAnnee, Integer pDerniereValeur) {
+        NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
+        MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
+        vSqlParams.addValue("journal_code", pJournalCode);
+        vSqlParams.addValue("annee", pAnnee);
+        vSqlParams.addValue("derniere_valeur", pDerniereValeur);
+
+        SequenceEcritureComptableRM vRM = new SequenceEcritureComptableRM();
+        SequenceEcritureComptable vBean;
+        try {
+            vBean = vJdbcTemplate.queryForObject(SQLgetSequenceEcritureComptable, vSqlParams, vRM);
+        } catch (EmptyResultDataAccessException vEx) {
+            return null;
+        }
+        return vBean;
+    }
+
     /**
      * Insert une sequence d'ecriture comptable
      * @param pSequenceEcritureComptable
@@ -384,6 +411,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         vSqlParams.addValue("annee", pSequenceEcritureComptable.getAnnee());
         vSqlParams.addValue("journal_code", pSequenceEcritureComptable.getReferenceJournalCode());
+        vSqlParams.addValue("derniereValeur",pSequenceEcritureComptable.getDerniereValeur()-1);
         vJdbcTemplate.update(SQLdeleteSequenceEcritureComptable, vSqlParams);
     }
 
