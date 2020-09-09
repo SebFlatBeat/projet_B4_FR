@@ -18,7 +18,7 @@ public class BusinessProxyImpl implements BusinessProxy {
 
     // ==================== Attributs ====================
     /** The Comptabilite manager. */
-    private ComptabiliteManager comptabiliteManager = new ComptabiliteManagerImpl();
+    private final ComptabiliteManager comptabiliteManager = new ComptabiliteManagerImpl();
 
 
     // ==================== Constructeurs ====================

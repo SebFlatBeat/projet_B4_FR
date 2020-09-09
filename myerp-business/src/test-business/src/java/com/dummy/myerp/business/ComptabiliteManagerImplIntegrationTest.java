@@ -1,9 +1,7 @@
 package com.dummy.myerp.business;
 
-import com.dummy.myerp.business.impl.BusinessProxyImpl;
 import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.business.impl.manager.ComptabiliteManagerImpl;
-import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
@@ -31,8 +29,8 @@ public class ComptabiliteManagerImplIntegrationTest extends BusinessTestCase{
     private ComptabiliteManagerImpl manager;
 
     private EcritureComptable vEcritureComptable;
-    private ComptabiliteDaoImpl comptabiliteDao = ComptabiliteDaoImpl.getInstance();
-    private TransactionManager transactionManager = TransactionManager.getInstance();
+    private final ComptabiliteDaoImpl comptabiliteDao = ComptabiliteDaoImpl.getInstance();
+    private final TransactionManager transactionManager = TransactionManager.getInstance();
 
     private List<CompteComptable> compteComptableList = new ArrayList<>();
     private List<JournalComptable> journalComptableList = new ArrayList<>();

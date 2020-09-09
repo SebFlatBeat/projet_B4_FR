@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 @ContextConfiguration(locations = {"classpath:bootstrapContext.xml"})
 public class ComptabiliteDaoImplTest {
 
-    private ComptabiliteDaoImpl comptabiliteDao = ComptabiliteDaoImpl.getInstance();
+    private final ComptabiliteDaoImpl comptabiliteDao = ComptabiliteDaoImpl.getInstance();
 
     private List<CompteComptable> compteComptableList = new ArrayList<>();
 
@@ -73,10 +73,10 @@ public class ComptabiliteDaoImplTest {
         assertNotNull(sequenceEcritureComptable);
 
         sequenceEcritureComptable.setDerniereValeur(2);
-        comptabiliteDao.updateSequenceEcritureComptable(sequenceEcritureComptable);;
+        comptabiliteDao.updateSequenceEcritureComptable(sequenceEcritureComptable);
 
         sequenceEcritureComptable = comptabiliteDao.getSequenceEcritureComptable("AC",1990, sequenceEcritureComptable.getDerniereValeur());
-        assertTrue(sequenceEcritureComptable.getDerniereValeur().equals(2));
+        assertEquals(2, (int) sequenceEcritureComptable.getDerniereValeur());
 
         comptabiliteDao.deleteSequenceEcritureComptable(sequenceEcritureComptable);
         sequenceEcritureComptable = comptabiliteDao.getSequenceEcritureComptable("AC",1990,sequenceEcritureComptable.getDerniereValeur());
