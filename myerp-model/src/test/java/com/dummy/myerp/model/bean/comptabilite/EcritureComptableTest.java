@@ -68,12 +68,11 @@ public class EcritureComptableTest {
 
     @Test
     public void getTotalCredit(){
-        EcritureComptable vEcriture;
-        vEcriture = new EcritureComptable();
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
-        Assert.assertEquals("33", vEcriture.getTotalCredit().toString());
-        Assert.assertNotEquals(null, vEcriture.getTotalCredit().toString());
+        EcritureComptable pEcriture = new EcritureComptable();
+        pEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
+        pEcriture.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
+        Assert.assertEquals("33.00", pEcriture.getTotalCredit().toString());
+        Assert.assertNotEquals(null, pEcriture.getTotalCredit().toString());
     }
 
     @Test
