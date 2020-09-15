@@ -1,7 +1,6 @@
 package com.dummy.myerp.consumer.dao.impl.db.dao;
 
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.*;
@@ -342,7 +341,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
 
     /**
      * Renvoi une Liste de Sequence d'écriture comptable avec en parametre l'annee
-     * @param pAnnee
+     * @param pAnnee Integer correspondant à l'année
      * @return vList
      */
     @Override
@@ -375,7 +374,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
 
     /**
      * Insert une sequence d'ecriture comptable
-     * @param pSequenceEcritureComptable
+     * @param pSequenceEcritureComptable contenant les elements de la sequence
      */
     @Override
     public void insertSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable) {
@@ -389,7 +388,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
 
     /**
      * Met à jour une sequence d'ecriture comptable
-     * @param pSequenceEcritureComptable
+     * @param pSequenceEcritureComptable contenant les elements de la sequence
      */
     @Override
     public void updateSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable) {
@@ -403,7 +402,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
 
     /**
      * Supprime une sequence d'ecriture comptable
-     * @param pSequenceEcritureComptable
+     * @param pSequenceEcritureComptable contenant les elements de la sequence
      */
     @Override
     public void deleteSequenceEcritureComptable(SequenceEcritureComptable pSequenceEcritureComptable) {
