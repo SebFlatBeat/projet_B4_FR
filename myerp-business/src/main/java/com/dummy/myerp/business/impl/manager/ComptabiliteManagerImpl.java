@@ -226,6 +226,42 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     }
 
     /**
+     *
+     *
+     * @param amount
+     * @return
+     */
+    public boolean isAmountExist(BigDecimal amount){
+        return ( BigDecimal.ZERO.compareTo( ObjectUtils.defaultIfNull(amount, BigDecimal.ZERO )  ) != 0 );
+    }
+
+    /**
+     * RG_Compta_3 : une écriture comptable doit avoir au moins 2 lignes d'écriture (1 au débit, 1 au crédit)
+     *
+     * @param pEcritureComptable
+     * @return
+     */
+    public boolean isNumberValidEcritureComptable(EcritureComptable pEcritureComptable) {
+
+        if(pEcritureComptable.getListLigneEcriture().size() < 2) return false;
+
+        int vNbrCredit = 0;
+        int vNbrDebit = 0;
+
+        for (LigneEcritureComptable vLigneEcritureComptable : pEcritureComptable.getListLigneEcriture()) {
+
+            if(isAmountExist(vLigneEcritureComptable.getCredit()))
+                vNbrCredit++;
+
+            if(isAmountExist(vLigneEcritureComptable.getDebit()))
+                vNbrDebit++;
+        }
+
+        return (vNbrCredit>0 && vNbrDebit>0);
+
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

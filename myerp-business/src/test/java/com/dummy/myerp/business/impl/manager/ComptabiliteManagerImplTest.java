@@ -15,6 +15,7 @@ import com.dummy.myerp.technical.exception.FunctionalException;
 import org.junit.rules.ExpectedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ComptabiliteManagerImplTest {
 
@@ -63,6 +64,7 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable.getListLigneEcriture().add(ligneEcritureDebit);
 
         manager.checkEcritureComptableUnit(vEcritureComptable);
+        assertTrue(manager.isNumberValidEcritureComptable(vEcritureComptable));
     }
 
     @Test(expected = FunctionalException.class)
@@ -70,6 +72,7 @@ public class ComptabiliteManagerImplTest {
         EcritureComptable pEcritureComptable = new EcritureComptable();
 
         manager.checkEcritureComptableUnit(pEcritureComptable);
+
     }
 
     @Test
@@ -209,6 +212,54 @@ public class ComptabiliteManagerImplTest {
                 null));
 
         manager.checkEcritureComptableUnit(vEcritureComptable);
+    }
+
+    @Test
+    public void isAmountExist(){
+
+        Assert.assertTrue(manager.isAmountExist(new BigDecimal("1")));
+        Assert.assertTrue(manager.isAmountExist(new BigDecimal("-1")));
+        Assert.assertTrue(manager.isAmountExist(new BigDecimal("1.1")));
+        Assert.assertTrue(manager.isAmountExist(new BigDecimal("-1.1")));
+
+        Assert.assertFalse(manager.isAmountExist(BigDecimal.ZERO));
+        Assert.assertFalse(manager.isAmountExist(new BigDecimal("0")));
+        Assert.assertFalse(manager.isAmountExist(new BigDecimal("0.00")));
+        Assert.assertFalse(manager.isAmountExist(null));
+    }
+
+    @Test
+    public void isNumberValidEcritureComptable(){
+        EcritureComptable vEcriture;
+        vEcriture = new EcritureComptable();
+
+        vEcriture.getListLigneEcriture().clear();
+        vEcriture.setLibelle("Nombre écriture valide : au moins 1  ligne de débit et 1 ligne de crédit");
+        vEcriture.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture c1",new BigDecimal(411),null));
+        vEcriture.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), "Facture c2",null,new BigDecimal(301)));
+        Assert.assertTrue(manager.isNumberValidEcritureComptable(vEcriture));
+
+        vEcriture.getListLigneEcriture().clear();
+        vEcriture.setLibelle("Nombre écriture non valide : 1 seule ligne de débit");
+        vEcriture.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture c1",new BigDecimal(411), null));
+        Assert.assertFalse(manager.isNumberValidEcritureComptable(vEcriture));
+
+        vEcriture.getListLigneEcriture().clear();
+        vEcriture.setLibelle("Nombre écriture non valide : 1 seule ligne de crédit");
+        vEcriture.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),"Facture c1",null, new BigDecimal(301)));
+        Assert.assertFalse(manager.isNumberValidEcritureComptable(vEcriture));
+
+        vEcriture.getListLigneEcriture().clear();
+        vEcriture.setLibelle("Nombre écriture non valide : 2 lignes de crédit");
+        vEcriture.getListLigneEcriture().add(ligneEcritureCredit);
+        vEcriture.getListLigneEcriture().add(ligneEcritureCredit);
+        Assert.assertFalse(manager.isNumberValidEcritureComptable(vEcriture));
+
+        vEcriture.getListLigneEcriture().clear();
+        vEcriture.setLibelle("Nombre écriture non valide : 2 lignes de debit");
+        vEcriture.getListLigneEcriture().add(ligneEcritureDebit);
+        vEcriture.getListLigneEcriture().add(ligneEcritureDebit);
+        Assert.assertFalse(manager.isNumberValidEcritureComptable(vEcriture));
     }
 
 }
