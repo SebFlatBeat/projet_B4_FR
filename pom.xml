@@ -52,7 +52,7 @@
 
         <!-- ===== Version properties ===== -->
         <log4j.version>2.13.3</log4j.version>
-        <spring.version>5.2.6.RELEASE</spring.version>
+        <spring.version>5.3.18</spring.version>
         <dep.junit.version>5.6.2</dep.junit.version>
         <dep.assertj.version>3.16.1</dep.assertj.version>
         <dep.mockito-junit-jupiter.version>3.3.3</dep.mockito-junit-jupiter.version>
